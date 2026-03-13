@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="portstyles.css">
+  
+</head>
+<body>
+    <body id="achiv-body">
+    <section id="top-bar">
+        <div class="home-button">
+            <a href="portfolio-homepage.html">Home</a>
+        </div>
+        <div class="achivments-button">
+            <a href="portfolio-achivments.html">Projects</a>
+        </div>
+        <div class="resume-button">
+            <a href="portfolio-resume.html">Resume </a>
+        </div>
+        <div class="life-style">
+            <a href="portfolio-lifestyle.html"> Life-Style</a>
+        </div>
+    </section>
+    <div id="container">
+        <h3>monthly budget planner</h3>
+        <div class="box">
+                <h3> monthly income</h3>
+                <input type="number" id="salaryInput" placeholder="salary"/>
+               <button onclick="addSalary()">Add Salary</button>
+                <div class="input-group">
+            <h3> monthly expenses</h3>
+            <input type="number" id="rentInput" placeholder="rent"/>
+            <button onclick="addRent()">Add Rent</button>
+            <br />
+            <input type="number" id="uttilInput" placeholder="utilities"/>
+            <button onclick="addUtilities()">Add Utilities</button>
+        </div>
+
+        </div>
+        
+        <div class="summary">
+            <h3> monthly summary</h3>
+            <p>Total Income: $<span id="totalIncome">0</span></p>
+            <p>Total Expenses: $<span id="totalExpenses">0</span></p>
+            <p>Rent: $<span id="rentExpense">0</span></p>
+        </div>
+        <div class="summary">
+            <h3> annual summary</h3>
+            <p>Total Income: $<span id="annualIncome">0</span></p>
+            <p>Total Expenses: $<span id="annualExpenses">0</span></p>
+            <p>Annual Rent: $<span id="annualRent">0</span></p>
+        </div>
+       
+
+    </div>
+      <script>
+        let totalIncome = 0;
+let rentExpense = 0;
+let utilityExpense = 0;
+
+
+function addSalary(){
+    let salaryInput = document.getElementById("salaryInput");
+    let salary = Number(salaryInput.value);
+    if (!isNaN(salary) && salary > 0) {
+        totalIncome += salary;
+        updateSummary();
+    }
+}
+
+function addRent(){
+    let rentInput = document.getElementById("rentInput");
+    let rent = Number(rentInput.value);
+    if (!isNaN(rent) && rent > 0) {
+        rentExpense += rent;
+        updateSummary();
+    }
+}
+
+function addUtilities(){
+    let utilInput = document.getElementById("uttilInput");
+    let util = Number(utilInput.value);
+    if (!isNaN(util) && util > 0) {
+        utilityExpense += util;
+        updateSummary();
+    }
+}
+
+function updateSummary(){
+    // Monthly
+    let totalIncomeElem = document.getElementById("totalIncome");
+    if (totalIncomeElem) totalIncomeElem.innerHTML = totalIncome;
+    let totalExpensesElem = document.getElementById("totalExpenses");
+    if (totalExpensesElem) totalExpensesElem.innerHTML = rentExpense + utilityExpense;
+    let rentExpenseElem = document.getElementById("rentExpense");
+    if (rentExpenseElem) rentExpenseElem.innerHTML = rentExpense;
+    let utilityExpenseElem = document.getElementById("utilityExpense");
+    if (utilityExpenseElem) utilityExpenseElem.innerHTML = utilityExpense;
+    // Annual
+    let annualIncome = totalIncome * 12;
+    let annualIncomeElem = document.getElementById("annualIncome");
+    if (annualIncomeElem) annualIncomeElem.innerHTML = annualIncome;
+    let annualExpensesElem = document.getElementById("annualExpenses");
+    if (annualExpensesElem) annualExpensesElem.innerHTML = (rentExpense + utilityExpense) * 12;
+    let annualRentElem = document.getElementById("annualRent");
+    if (annualRentElem) annualRentElem.innerHTML = rentExpense * 12;
+    let annualUtilitiesElem = document.getElementById("annualUtilities");
+    if (annualUtilitiesElem) annualUtilitiesElem.innerHTML = utilityExpense * 12;
+    // Debug
+    console.log({totalIncome, rentExpense, utilityExpense, annualIncome});
+
+    //
+}
+      </script>
+</body>
+</html>

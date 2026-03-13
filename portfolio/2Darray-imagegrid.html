@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="portstyles.css">
+    <title>Document</title>
+    <style>
+        img{
+    width:200px;
+    height: 200px;
+    margin: 5px;
+    border: 2px solid black;
+}
+.grid{
+    width: fit-content;
+    height: fit-content;
+    border: 2px solid black;
+}
+.Reset{
+    width: 50px;
+    height: 25px;
+    background-color: red;
+}
+    </style>
+</head>
+<body>
+    <div class="PageId">
+        <h2>Projects Page</h2>
+    </div>
+    <section id="top-bar">
+        <div class="home-button">
+            <a href="portfolio-homepage.html">Home</a>
+        </div>
+        <div class="achivments-button">
+            <a href="portfolio-achivments.html">Projects</a>
+        </div>
+        <div class="resume-button">
+            <a href="portfolio-resume.html">Resume </a>
+        </div>
+        <div class="life-style">
+            <a href="portfolio-lifestyle.html"> Contact Info</a>
+        </div>
+    </section>
+    <p id="stats"></p>
+    <div id="grid" class="grid">
+
+    </div>
+    <button class="Reset" onclick="window.location.reload();">Reset</button>
+</body>
+<script>
+    // Helper function to create a new image element
+function createImage(src) {
+    const img = document.createElement("img");
+    img.dataset.src = src; // store the real image path
+    img.src = "image/card-back.png"; // use a card back image (add this image to your folder)
+    img.style.margin = "5px";
+    img.width = 100;
+    img.classList.add("memory-card");
+    return img;
+}
+
+// List of all image sources (each appears twice for matching)
+const imageSources = [
+    "image/wizard.jpg", "image/sorcer.jpg", "image/Druid_PHB5e2024.webp",
+    "image/warlock-origin-feats6562812233233316201.webp", "image/paladin.png", "image/bard.jpg",
+    "image/Artificer.jpeg", "image/Ranger-beast-master.jpg", "image/cleric.jpg",
+    "image/wizard.jpg", "image/sorcer.jpg", "image/Druid_PHB5e2024.webp",
+    "image/warlock-origin-feats6562812233233316201.webp", "image/paladin.png", "image/bard.jpg",
+    "image/Artificer.jpeg", "image/Ranger-beast-master.jpg", "image/cleric.jpg"
+];
+
+// Shuffle the images
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+shuffle(imageSources);
+
+// Create a 3x6 grid of cards
+let DNDMagic = [];
+let idx = 0;
+for (let i = 0; i < 3; i++) {
+    let row = [];
+    for (let j = 0; j < 6; j++) {
+        row.push(createImage(imageSources[idx++]));
+    }
+    DNDMagic.push(row);
+}
+
+let firstCard = null;
+let secondCard = null;
+let lockBoard = false;
+let attempts = 0;
+let matches = 0;
+function flipCard(card) {
+    if (lockBoard || card === firstCard || card.classList.contains('matched')) return;
+    card.src = card.dataset.src;
+    if (!firstCard) {
+        firstCard = card;
+        return;
+    }
+
+    attempts++;
+    secondCard = card;
+    lockBoard = true;
+    // Check for match
+    if (firstCard.dataset.src === secondCard.dataset.src) {
+        firstCard.classList.add('matched');
+        secondCard.classList.add('matched');
+        matches++;
+        displayStats();
+        resetBoard();
+    } else {
+        setTimeout(() => {
+            firstCard.src = "image/backofacard.jpg";
+            secondCard.src = "image/card-back.png";
+            displayStats();
+            resetBoard();
+        }, 1000);
+    }
+}
+
+function displayStats(){
+    document.getElementById("stats").innerHTML = `Matches: ${matches} | Attempts: ${attempts}`
+}   
+
+function resetBoard() {
+    [firstCard, secondCard, lockBoard] = [null, null, false];
+}
+
+function displayImagesAsTable() {
+    const grid = document.getElementById("grid");
+    if (!grid) {
+        console.error("Grid element not found.");
+        return;
+    }
+    grid.innerHTML = "";
+    const table = document.createElement("table");
+    for (let row of DNDMagic) {
+        const tr = document.createElement("tr");
+        for (let img of row) {
+            const td = document.createElement("td");
+            td.appendChild(img);
+            tr.appendChild(td);
+            img.addEventListener('click', () => flipCard(img));
+        }
+        table.appendChild(tr);
+    }
+    grid.appendChild(table);
+    displayStats()
+}
+displayImagesAsTable();
+</script>
+</html>
